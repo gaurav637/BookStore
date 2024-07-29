@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const {Schema} = require('mongoose');
+
 
 const reviewSchema = new mongoose.Schema({
     bookId:{
@@ -26,7 +28,7 @@ const reviewSchema = new mongoose.Schema({
         type: String
     },
     isDeleted:{
-        type: boolean,
+        type: Boolean,
         default: false
     }
 })
