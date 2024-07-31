@@ -4,10 +4,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const {
-    createUser
-} = require('./my.queries');
-
 const createNewUser = async (reqBody) => {
     const user = new User(reqBody);
     return user.save();

@@ -1,5 +1,7 @@
 const {Book} = require('../models');
 const ApiError = require('../utils/ApiError');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const createBook = async (reqBody) => {
     const book = new Book(reqBody);
@@ -50,7 +52,13 @@ const getBookByObjectId = async (id) => {
     return books;
 }
 
-const updateBook = async (reqBody,id) => {
+const updateBook = async (reqBody,id,token) => {
+    const book = await Book.findById(id);
+    const {userId} = book;
+    const decoded = await jwt.verify(token,process.env.SECRET_KEY);
+    if(userId!=decoded.userId){
+       throw new ApiError(500, "Not change another user book details");
+    }
     const updatedBook = await Book.findByIdAndUpdate(
         id,             
         reqBody,        
@@ -62,8 +70,13 @@ const updateBook = async (reqBody,id) => {
     return updatedBook;
 }
 
-const deleteBookById = async (id) => {
+const deleteBookById = async (id,token) => {
     const book = await Book.findById(id);
+    const {userId} = book;
+    const decoded = await jwt.verify(token,process.env.SECRET_KEY);
+    if(userId!=decoded.userId){
+       throw new ApiError(500, "Not change another user book details");
+    }
     if(book.isDelete){
         throw new ApiError(500, "Book is already deleted")
     }
