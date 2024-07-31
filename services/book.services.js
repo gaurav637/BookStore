@@ -75,7 +75,7 @@ const deleteBookById = async (id,token) => {
     const {userId} = book;
     const decoded = await jwt.verify(token,process.env.SECRET_KEY);
     if(userId!=decoded.userId){
-       throw new ApiError(500, "Not change another user book details");
+       throw new ApiError(500, "Not delete another user book details");
     }
     if(book.isDelete){
         throw new ApiError(500, "Book is already deleted")
