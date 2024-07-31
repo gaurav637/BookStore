@@ -12,14 +12,26 @@ module.exports.addReview = async (req, res) => {
 
 module.exports.deleteBookReviews = async (req,res) => {
     try{
-        const {id} = req.parmas;
-        const deleteBooksReview = await reviewService.softDeletedReview(id);
+        const deleteBooksReview = await reviewService.softDeletedReview(req.body);
         res.status(200).json({
             Message: "Book Reviews Soft Deleted ",
             Data: deleteBooksReview,
         });
 
     }catch(err){
-        res.status(500).json({Message: err.message});
+        res.json({Message: err.message});
+    }
+}
+
+module.exports.updateReviews = async (req,res) => {
+    try{
+        const updateBookReview = await reviewService.updateReview(req.body);
+        res.status(200).json({
+            Message: "updated Reviews",
+            Data:updateBookReview,
+        });
+
+    }catch(err){
+        res.json({Message: err.message});
     }
 }

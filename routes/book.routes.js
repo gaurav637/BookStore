@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post(
     "/create",
-    // authentication,
+    authentication,
     bookController.createBook
 );
 

@@ -7,7 +7,7 @@ const createBook = async (reqBody) => {
 }
 
 const getAllBook = async () => {
-    const books = await Book.find({isDelete:false});
+    const books = await Book.find();
     return books;
 }
 

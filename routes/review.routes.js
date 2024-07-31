@@ -12,4 +12,8 @@ router.delete(
     reviewController.deleteBookReviews
 );
 
+router.put(
+    "/update",
+    reviewController.updateReviews
+);
 module.exports = router;

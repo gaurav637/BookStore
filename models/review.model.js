@@ -9,9 +9,9 @@ const reviewSchema = new mongoose.Schema({
         ref: 'Book'
     },
     reviewedBy:{
-        type: String,
-        default: "Guest",
-        value: String
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
     },
     reviewedAt:{
         type: Date,
