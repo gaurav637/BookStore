@@ -10,13 +10,12 @@ const reviewSchema = new mongoose.Schema({
     },
     reviewedBy:{
         type: String,
-        required: true,
         default: "Guest",
         value: String
     },
     reviewedAt:{
-        type: String,
-        required: true
+        type: Date,
+        default: Date.now(),
     },
     rating:{
         type: Number,
@@ -27,7 +26,7 @@ const reviewSchema = new mongoose.Schema({
     review:{
         type: String
     },
-    isDeleted:{
+    isDelete:{
         type: Boolean,
         default: false
     }

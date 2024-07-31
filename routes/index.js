@@ -15,7 +15,7 @@ const routes = [
         route: bookRoutes
     },
     {
-        path: 'review',
+        path: '/review',
         route: reviewRoutes
     },
 ]
