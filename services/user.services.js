@@ -32,21 +32,20 @@ const signinUser = async (email, password) => {
     // Generate JWT token
     const key = process.env.SECRET_KEY;
     const token = jwt.sign({ userId: user._id }, key, { expiresIn: '7d' });
-  
+    res.cookie("token",token)
     return token;
-  };
+};
   
 const logoutUser = async (token) => {
     if (!token) {
         throw new ApiError(404, "User is not logged in");
     }
     try {
-        console.log("before verification 37");
         const checkToken = jwt.verify(token, process.env.SECRET_KEY);
-        console.log("after verification 38!");
         if (!checkToken) {
             throw new ApiError(404, "User is not logged in!");
         }
+        
         const message = "User is logged out";
         return message;
     } catch (err) {

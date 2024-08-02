@@ -45,6 +45,7 @@ module.exports.logout = async (req, res) => {
         }
         const token = tokenParts[1];
         const message = await userService.logoutUser(token);
+        res.clearCookie('token');
         res.status(200).json({ Message: message });
     } catch (err) {
         res.status(500).json({ Message: err.message });
