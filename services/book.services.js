@@ -9,22 +9,35 @@ const createBook = async (reqBody) => {
 }
 
 const getAllBook = async () => {
-    const books = await Book.find();
+   //  const books = await Book.find();
+    const books =  await Book.aggregate([
+        {$match: {}}
+    ])
     return books;
 }
 
 const getBooksByCategory = async (reqBody) => {
-    const books = await Book.find(reqBody);
+    // const books = await Book.find(reqBody);
+    const books = await Book.aggregate([
+        {$match: reqBody}
+    ])
     return books;
 }
 
 const getBooksBySubcategory = async (reqBody) => {
-    const books = await Book.find(reqBody);
+   //  const books = await Book.find(reqBody);
+    const books = await Book.aggregate([
+        {$match: reqBody}
+    ])
     return books;
 }
 
 const getAllBooksSortedByNameAlphabaticalOrder = async () => {
-    const books = await Book.find().sort({title: 1});
+    // const books = await Book.find().sort({title: 1});
+    const books = await Book.aggregate([
+        {$match: {}},
+        {$sort: {title: 1}}
+    ])
     return books;
 }
 
@@ -43,17 +56,26 @@ const getBookByFilterBookData = async (searchKey) => {
         };
     }
     console.log("reqBody -> ",reqBody);
-    const books = await Book.find(reqBody);
+   //  const books = await Book.find(reqBody);
+    const books = await Book.aggregate([
+        {$match: reqBody}
+    ])
     return books;
 };
 
 const getBookByObjectId = async (id) => {
-    const books = await Book.findById(id);
+    // const books = await Book.findById(id);
+    const books = await Book.aggregate([
+        {$match: {_id: id}}
+    ])
     return books;
 }
 
 const updateBook = async (reqBody,id,token) => {
-    const book = await Book.findById(id);
+   //  const book = await Book.findById(id);
+    const book = await Book.aggregate([
+        {$match: {_id: id}}
+    ])
     const {userId} = book;
     const decoded = await jwt.verify(token,process.env.SECRET_KEY);
     if(userId!=decoded.userId){
@@ -71,7 +93,11 @@ const updateBook = async (reqBody,id,token) => {
 }
 
 const deleteBookById = async (id,token) => {
-    const book = await Book.findById(id);
+    //const book = await Book.findById(id);
+
+    const book = await Book.aggregate([
+        {$match: {_id: id}}
+    ])
     const {userId} = book;
     const decoded = await jwt.verify(token,process.env.SECRET_KEY);
     if(userId!=decoded.userId){

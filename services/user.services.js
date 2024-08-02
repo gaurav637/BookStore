@@ -10,19 +10,32 @@ const createNewUser = async (reqBody) => {
 };
 
 const signinUser = async (email, password) => {
-    const user = await  User.findOne({email});
-    if(!user){
-        throw new ApiError(401, "Failed to authenticate!");
+    // Perform aggregation to fetch user details
+    const result = await User.aggregate([
+      { $match: { email: email } }
+    ]);
+    // Check if user exists
+    if (result.length === 0) {
+      throw new ApiError(401, "Failed to authenticate!");
     }
-    const passwordMatcher = await bcrypt.compare(password,user.password);
-    if(!passwordMatcher){
-        throw new ApiError(401, "Failed to authenticate ! invalid password");
-    }
-    const key = process.env.SECRET_KEY;
-    const token = jwt.sign({userId: user._id},key,{expiresIn: '7d'});
-    return token;
-};
+    const user = result[0];
 
+    if (!password || !user.password) {
+      throw new ApiError(401, "Password or hashed password is missing!");
+    }
+
+    const passwordMatcher = await bcrypt.compare(password, user.password);
+    if (!passwordMatcher) {
+      throw new ApiError(401, "Failed to authenticate! Invalid password.");
+    }
+  
+    // Generate JWT token
+    const key = process.env.SECRET_KEY;
+    const token = jwt.sign({ userId: user._id }, key, { expiresIn: '7d' });
+  
+    return token;
+  };
+  
 const logoutUser = async (token) => {
     if (!token) {
         throw new ApiError(404, "User is not logged in");
@@ -42,11 +55,12 @@ const logoutUser = async (token) => {
 };
 
 const getUsers = async () => {
-   const users = User.find();
+   // const users = await  User.find();
+   const users = await User.aggregate([
+       {$match: {}}
+   ]);
    return users;
 }
-
-
 
 module.exports = {
     createNewUser,

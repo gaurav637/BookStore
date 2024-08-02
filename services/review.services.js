@@ -6,12 +6,19 @@ const addReviewIntoBook = async (reqBody) => {
     try {
         const newReview = new Review(reqBody);
         const { bookId, reviewedBy } = reqBody;
-        const existingReview = await Review.findOne({ bookId, reviewedBy });
+       //  const existingReview = await Review.findOne({ bookId, reviewedBy });
+        const existingReview = await Review.aggregate([
+            {$match: {bookId: reviewedBy}}
+        ])
         if (existingReview) {
             throw new ApiError(400,'User has already reviewed this book');
         }
         await newReview.save();
-        const book = await Book.findById(bookId);
+
+        // const book = await Book.findById(bookId);
+        const book = await Book.aggregate([
+            {$match: {_id: id}}
+        ])
         if (!book) {
             throw new Error('Book not found');
         }
@@ -32,7 +39,10 @@ const addReviewIntoBook = async (reqBody) => {
 
 const softDeletedReview = async (reqBody) => {
     const {bookId, reviewedBy,_id} = reqBody;
-    const reviewData = await Review.findById(_id);
+    // const reviewData = await Review.findById(_id);
+    const reviewData = await Review.aggregate([
+        {$match: {_id: _id}}
+    ])
     if(reviewData.isDelete){
         throw new ApiError(500, 'this reviews already deleted!');
     }
@@ -58,7 +68,10 @@ const softDeletedReview = async (reqBody) => {
 
 const updateReview = async (reqBody) => {
     const {bookId, reviewedBy,_id}  = reqBody;
-    const existingReview = await Review.findOne({bookId, reviewedBy,_id});
+   //  const existingReview = await Review.findOne({bookId, reviewedBy,_id});
+    const existingReview = await Review.aggregate([
+        {$match: {bookId , reviewedBy,_id}}
+    ])
     if(!existingReview){
         throw new ApiError(500 , "Review not found !");
     }
