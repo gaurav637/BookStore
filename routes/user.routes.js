@@ -17,7 +17,7 @@ router.get(
 );
 router.get(
     "/get-all",
-    rateLimiterMiddleware,
+    rateLimiterMiddleware, //rate limiter
     userController.getAllUser
 );
 
