@@ -1,6 +1,7 @@
 const express = require('express');
 const {userController} = require('../controllers');
 const router = express.Router();
+const rateLimiterMiddleware = require('../middlewares/rateLimiter.middleare');
 
 router.post(
     "/create",
@@ -16,6 +17,7 @@ router.get(
 );
 router.get(
     "/get-all",
+    rateLimiterMiddleware,
     userController.getAllUser
 );
 
