@@ -8,6 +8,10 @@ const app = express();
 app.use(express.json());
 app.use('/api',router);
 
+app.get('/' , (req,res) => {
+    res.send("hello world welcome to server");
+})
+
 
 const PORT = process.env.PORT||6060;
 app.listen(PORT , ()=> {

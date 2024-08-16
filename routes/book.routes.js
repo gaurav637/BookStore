@@ -5,13 +5,13 @@ const router = express.Router();
 
 router.post(
     "/create",
-    authentication,
+    // authentication,
     bookController.createBook
 );
 
 router.get(
     "/get-all",
-    authentication,
+    // authentication,
     bookController.getAllBooks
 );
 
