@@ -10,10 +10,9 @@ app.use('/api',router);
 
 app.get('/' , (req,res) => {
     res.send("hello world welcome to server");
-})
-
-
+});
 const PORT = process.env.PORT||6060;
 app.listen(PORT , ()=> {
     console.log(`server is runnong at ${PORT} `);
 })
+
